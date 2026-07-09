@@ -2,10 +2,10 @@
   "name": "chai_aur_code-projects",
   "version": "1.0.0",
   "description": "backend project",
-  "main": " ",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",
@@ -17,6 +17,9 @@
     "nodemon": "^3.1.14"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.4",
     "prettier": "^3.9.4"
   }
 }
