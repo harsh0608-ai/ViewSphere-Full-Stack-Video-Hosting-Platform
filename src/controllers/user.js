@@ -25,18 +25,23 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // check for avatar and cover image files in the request
-    const avtarFile = req.files?.avatar[0]?.path;
-    const coverImageFile = req.files?.coverImage ?.path ;
+    const avatarFile = req.files?.avatar[0]?.path;
+    // const coverImageFile = req.files?.coverImage[0] ?.path ;
 
-    if(!avtarFile) {
+    let coverImageFile ;
+    if(req.files?.coverImage && req.files.coverImage.length > 0 && Array.isArray(req.files.coverImage)) {
+        coverImageFile = req.files.coverImage[0].path;
+    }
+
+    if(!avatarFile) {
         throw new ApiError(400, "Avatar image is required");
     }
 
     //Upload avatar and cover image to cloudinary
-    const avtar= await uploadOnCloudinary(avtarFile);
+    const avatar= await uploadOnCloudinary(avatarFile);
     const coverImage= await uploadOnCloudinary(coverImageFile);
 
-    if (!avtar) {
+    if (!avatar) {
         throw new ApiError(500, "Failed to upload avatar image");
     }
 
@@ -46,8 +51,8 @@ const registerUser = asyncHandler(async (req, res) => {
         username:username.toLowerCase(),
         email,
         password,
-        avatar: avtar.secure_url,
-        coverImage: coverImage?.secure_url || ""
+        avatar: avatar.url,
+        coverImage: coverImage?.url || ""
     });
 
     // Fetch the created user without password and refreshToken fields
@@ -63,4 +68,4 @@ const registerUser = asyncHandler(async (req, res) => {
     return res.status(201).json(new ApiResponse(200,createdUser,"User registered successfully"));
 });
 
-export { registerUser };G
+export { registerUser };
